@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ar.sphinx.notelite.db.model.Note;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by sphinx on 21/05/18.
  */
@@ -75,5 +78,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		cursor.close();
 		return note;
+	}
+
+	public List<Note> getAllNotes(){
+
+		List<Note> notesList = new ArrayList<>();
+		SQLiteDatabase db = this.getReadableDatabase();
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER_BY " +
+				COLOUMN_TIMESTAMP + " DESC";
+
+		Cursor cursor = db.rawQuery(selectQuery,null);
+		if(cursor.moveToFirst()){
+			do{
+				Note note = new Note();
+				note.setId(cursor.getInt(cursor.getColumnIndex(COLOUMN_ID)));
+				note.setNote(cursor.getString(cursor.getColumnIndex(COLOUMN_NOTE)));
+				note.setTimestamp(cursor.getString(cursor.getColumnIndex(COLOUMN_TIMESTAMP)));
+
+				notesList.add(note);
+			}while(cursor.moveToNext());
+		}
+		db.close();
+		return notesList;
 	}
 }

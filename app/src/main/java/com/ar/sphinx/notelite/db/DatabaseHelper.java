@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		List<Note> notesList = new ArrayList<>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER_BY " +
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER_BY" +
 				COLOUMN_TIMESTAMP + " DESC";
 
 		Cursor cursor = db.rawQuery(selectQuery,null);
@@ -101,4 +101,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 		return notesList;
 	}
+
+	public int getNotesCount(){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String query = "SELECT * FROM " + TABLE_NAME;
+		Cursor cursor = db.rawQuery(query,null);
+		int count = cursor.getCount();
+		return count;
+	}
+
+	public int updateNote(Note note){
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(COLOUMN_NOTE,note.getNote());
+		return db.update(TABLE_NAME,values,COLOUMN_ID + "=?",
+				new String[]{String.valueOf(note.getId())});
+	}
+
+	public void deleteNote(Note note){
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_NAME,COLOUMN_ID + "=?",
+				new String[]{String.valueOf(note.getId())});
+		db.close();
+	}
+
 }

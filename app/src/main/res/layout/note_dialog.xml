@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
+
+    <TextView android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:lineSpacingExtra="8sp"
+        android:text="Note Title"
+        android:textColor="#0088c9"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+
+    <EditText
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="Enter note here !"
+        android:inputType="textCapSentences|textMultiLine"
+        android:lines="4"
+        android:textColorHint="#c25555"
+        android:textSize="16sp" />
+
+</LinearLayout>

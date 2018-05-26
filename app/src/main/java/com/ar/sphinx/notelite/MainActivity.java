@@ -47,10 +47,16 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void updateNote(String note,int pos){
-
+		Note dbNote = noteList.get(pos);
+		dbNote.setNote(note);
+		db.updateNote(dbNote);
+		noteList.set(pos,dbNote);
+		notesAdapter.notifyDataSetChanged();
 	}
 
 	public void deleteNote(int position){
-
+		db.deleteNote(noteList.get(position));
+		noteList.remove(position);
+		notesAdapter.notifyItemRemoved(position);
 	}
 }

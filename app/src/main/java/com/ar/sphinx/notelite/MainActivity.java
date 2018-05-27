@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.ar.sphinx.notelite.db.DatabaseHelper;
 import com.ar.sphinx.notelite.db.model.Note;
+import com.ar.sphinx.notelite.utils.MyDividerItemDecoration;
 import com.ar.sphinx.notelite.utils.NotesAdapter;
 import com.ar.sphinx.notelite.utils.RecyclerTouchListener;
 
@@ -43,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
 		db = new DatabaseHelper(this);
 		noteList.addAll(db.getAllNotes());
 		notesAdapter = new NotesAdapter(this,noteList);
-		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-		recyclerView.setLayoutManager(layoutManager);
+		RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+		recyclerView.setLayoutManager(mLayoutManager);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+		recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
 		recyclerView.setAdapter(notesAdapter);
 
 		fab.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 		if(dbNote!=null){
 			noteList.add(0,dbNote);
 			notesAdapter.notifyDataSetChanged();
+			toggleEmptyNotes();
 		}
-		toggleEmptyNotes();
 	}
 
 	public void updateNote(String note,int pos){
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 		dbNote.setNote(note);
 		db.updateNote(dbNote);
 		noteList.set(pos,dbNote);
-		notesAdapter.notifyDataSetChanged();
+		notesAdapter.notifyItemChanged(pos);
 		toggleEmptyNotes();
 	}
 
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 		AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(MainActivity.this);
 		alertDialogBuilderUserInput.setView(view);
 
-		final EditText inputNote = view.findViewById(R.id.note);
+		final EditText inputNote = view.findViewById(R.id.dialog_note);
 		TextView dialogTitle = view.findViewById(R.id.dialog_title);
 		dialogTitle.setText(!shouldUpdate ? "New Note" : "Update Note");
 
@@ -165,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 	private void toggleEmptyNotes() {
-		// you can check notesList.size() > 0
-
 		if (db.getNotesCount() > 0) {
 			emptyNotesView.setVisibility(View.GONE);
 		} else {

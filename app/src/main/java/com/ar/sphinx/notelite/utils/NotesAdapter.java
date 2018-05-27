@@ -43,7 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
 	@Override
 	public int getItemCount() {
-		return 0;
+		return notes.size();
 	}
 
 	class NoteViewHolder extends RecyclerView.ViewHolder {
